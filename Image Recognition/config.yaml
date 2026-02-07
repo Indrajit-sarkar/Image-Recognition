@@ -1,0 +1,194 @@
+# Advanced Image Recognition Configuration
+
+# Camera Settings
+camera:
+  default_source: 0  # 0 for built-in, 1+ for external
+  resolution: [1920, 1080]
+  fps: 30
+  buffer_size: 1
+
+# Performance Settings
+performance:
+  use_gpu: true
+  gpu_memory_fraction: 0.8
+  num_threads: 4
+  batch_size: 1
+  enable_tensorrt: true
+  enable_onnx: true
+
+# Cloud API Settings (NEW)
+cloud_apis:
+  enabled: true
+  max_requests_per_minute: 60
+  cache_enabled: true
+  cache_ttl: 1.0  # seconds
+  
+  google_vision:
+    enabled: true
+    api_key_env: "GOOGLE_VISION_API_KEY"
+    features:
+      - OBJECT_LOCALIZATION
+      - TEXT_DETECTION
+      - FACE_DETECTION
+    
+  roboflow:
+    enabled: true
+    api_key_env: "ROBOFLOW_API_KEY"
+    currency_model: "currency-detection"
+    confidence_threshold: 0.6
+    
+  clarifai:
+    enabled: false
+    api_key_env: "CLARIFAI_API_KEY"
+
+# Detection Models (Primary and Backup)
+models:
+  object_detection:
+    primary: "yolov8x"  # Highest accuracy
+    backup: ["detectron2", "faster_rcnn"]
+    confidence_threshold: 0.5
+    nms_threshold: 0.4
+    use_cloud_detection: true
+    person_detection_mode: "hybrid"  # 'local', 'cloud', 'hybrid'
+    
+  depth_estimation:
+    primary: "depth_anything"
+    backup: ["midas"]
+    max_distance: 10.0  # meters
+    
+  ocr:
+    primary: "easyocr"
+    backup: ["paddleocr", "tesseract", "keras_ocr"]
+    languages: ["en", "es", "fr", "de", "zh", "ja", "ar", "hi", "ru"]
+    
+  face_detection:
+    primary: "mediapipe"
+    backup: ["dlib", "face_recognition"]
+    
+  eye_tracking:
+    primary: "mediapipe"
+    backup: ["dlib"]
+    
+  hand_gesture:
+    primary: "mediapipe"
+    backup: ["opencv"]
+    enable_cursor_control: true
+    enable_3d_creation: true
+    smoothing_factor: 0.5
+    click_threshold: 30
+    pinch_threshold: 0.05
+    double_click_window: 0.5
+    
+  gesture_actions:
+    cursor_control:
+      enabled: true
+      sensitivity: 1.5
+      smoothing: 0.7
+      smoothing_algorithm: "kalman"  # 'kalman', 'exponential', 'average'
+    click:
+      enabled: true
+      gesture: "pinch"
+      threshold: 0.05
+    double_click:
+      enabled: true
+      gesture: "double_pinch"
+      time_window: 0.5
+    right_click:
+      enabled: true
+      gesture: "three_finger_pinch"
+    scroll:
+      enabled: true
+      gesture: "peace"
+      sensitivity: 3
+    drag:
+      enabled: true
+      gesture: "fist"
+    3d_creation:
+      enabled: true
+      draw_gesture: "index_up"
+      erase_gesture: "fist"
+      save_gesture: "peace"
+    
+  currency_detection:
+    primary: "custom_cnn"
+    backup: ["roboflow"]
+    supported_currencies: ["USD", "EUR", "GBP", "JPY", "CNY", "INR", "AUD", "CAD"]
+    use_cloud_detection: true
+    cloud_apis:
+      enabled: true
+    
+  medicine_detection:
+    primary: "custom_vision"
+    backup: ["roboflow"]
+    
+  food_detection:
+    primary: "food_vision"
+    backup: ["yolov8"]
+
+# Detection Categories
+categories:
+  general_objects:
+    - person
+    - eye
+    - pencil
+    - pen
+    - window
+    - wall
+    - door
+    - curtain
+    - phone
+    - book
+    - tablet
+    - laptop
+    - table
+    - dining_table
+    - bottle
+    - chair
+    - couch
+    - bed
+    - tv
+    - keyboard
+    - mouse
+    
+  currency:
+    detect_notes: true
+    detect_coins: true
+    identify_denomination: true
+    
+  medicine:
+    detect_pills: true
+    detect_bottles: true
+    read_labels: true
+    
+  text:
+    detect_text: true
+    recognize_language: true
+    translate: false
+
+# Detection Strategy
+detection_strategy:
+  use_cloud_for_currency: true
+  use_cloud_for_people: true
+  verify_with_cloud: true
+  fallback_to_local: true
+  cache_cloud_results: true
+  cache_ttl_seconds: 1.0
+
+# Optimization
+optimization:
+  enable_caching: true
+  cache_ttl: 300  # seconds
+  enable_tracking: true
+  tracking_algorithm: "CSRT"
+  multi_threading: true
+  async_processing: true
+
+# Output Settings
+output:
+  show_confidence: true
+  show_distance: true
+  show_bounding_boxes: true
+  show_labels: true
+  save_results: true
+  results_dir: "results"
+  log_level: "INFO"
