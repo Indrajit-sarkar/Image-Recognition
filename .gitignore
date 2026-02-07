@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Models
+models/*.pt
+models/*.pth
+models/*.onnx
+*.weights
+
+# Results
+results/
+*.jpg
+*.png
+*.mp4
+*.avi
+test_image.jpg
+benchmark_results.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
